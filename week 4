@@ -1,0 +1,47 @@
+import itertools
+import numpy as np
+
+def calculate_determinant(matrix):
+    # Convert the matrix to a NumPy array and calculate the determinant
+    return int(np.linalg.det(np.array(matrix)))
+
+def generate_all_matrices(n):
+    # Create a set to store unique matrices
+    unique_matrices = set()
+
+    # Counters for total matrices and matrices with determinant 0
+    total_matrices = 0
+    matrices_with_determinant_zero = 0
+
+    # Create a list of all permutations of 0's and 1's
+    elements = [0, 1] * (n**2 // 2) + [0] * (n**2 % 2)
+    permutations = list(itertools.permutations(elements))
+
+    # Generate matrices and calculate determinants
+    for perm in permutations:
+        matrix = [list(perm[i:i+n]) for i in range(0, len(perm), n)]
+        determinant = calculate_determinant(matrix)
+
+        # Convert the matrix to a tuple for comparison and check for uniqueness
+        matrix_tuple = tuple(map(tuple, matrix))
+        if matrix_tuple not in unique_matrices:
+            unique_matrices.add(matrix_tuple)
+            print("Matrix:")
+            for row in matrix:
+                print(row)
+            print(f"Determinant: {determinant}\n")
+
+            # Update counters
+            total_matrices += 1
+            if determinant == 0:
+                matrices_with_determinant_zero += 1
+
+    # Print the count of matrices
+    print(f"Total Matrices: {total_matrices}")
+    print(f"Matrices with Determinant 0: {matrices_with_determinant_zero}")
+
+# Input an integer from the user
+n = int(input("Enter the value of n: "))
+
+# Generate and print all unique matrices with determinants
+generate_all_matrices(n)
