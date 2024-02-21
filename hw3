@@ -1,0 +1,31 @@
+import random
+import statistics
+
+def simulate_experiment(num_simulations):
+    results = []
+
+    for _ in range(num_simulations):
+        hat = list(range(1, 7))
+
+        while len(hat) > 1:
+            draw1 = random.choice(hat)
+            hat.remove(draw1)
+            draw2 = random.choice(hat)
+            hat.remove(draw2)
+
+            difference = abs(draw1 - draw2)
+            hat.append(difference)
+
+        results.append(hat[0])
+
+    return results
+
+num_simulations = 10000
+simulation_results = simulate_experiment(num_simulations)
+
+# Calculate and print the results
+print("Smallest Possible Number:", min(simulation_results))
+print("Largest Possible Number:", max(simulation_results))
+print("Mean Number:", statistics.mean(simulation_results))
+print("Most Likely Outcome:", statistics.mode(simulation_results))
+print("Standard Deviation:", statistics.stdev(simulation_results))
