@@ -1,0 +1,29 @@
+def generate_tree(rows):
+    # Initialize a 2D list for the tree
+    tree = [[1]]
+
+    # Generate the tree using nested loops
+    for i in range(1, rows):
+        current_row = []
+        for j in range(len(tree[i - 1]) + 1):
+            if j == 0:
+                current_row.append(tree[i - 1][j] + 1)
+            elif j == len(tree[i - 1]):
+                current_row.append(tree[i - 1][j - 1] + 2)
+            else:
+                current_row.append(tree[i - 1][j - 1] + 2)
+                current_row.append(tree[i - 1][j] + 1)
+        tree.append(current_row)
+
+    return tree
+
+def print_tree(tree):
+    for row in tree:
+        print(row)
+
+# Set the number of rows (steps)
+rows = 19
+
+# Generate and print the tree
+tree = generate_tree(rows)
+print_tree(tree)
