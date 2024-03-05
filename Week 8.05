@@ -1,0 +1,39 @@
+def generate_tree(rows):
+    # Initialize a 2D list for the tree
+    tree = [[1]]
+
+    # Generate the tree using nested loops
+    for i in range(1, rows):
+        current_row = []
+        for j in range(len(tree[i - 1]) + 1):
+            if j == 0:
+                current_row.append(tree[i - 1][j] + 1)
+            elif j == len(tree[i - 1]):
+                current_row.append(tree[i - 1][j - 1] + 2)
+            else:
+                current_row.append(tree[i - 1][j - 1] + 2)
+                current_row.append(tree[i - 1][j] + 1)
+        tree.append(current_row)
+
+    return tree
+
+def count_values_in_row(row):
+    counts = {}
+    for value in row:
+        if value in counts:
+            counts[value] += 1
+        else:
+            counts[value] = 1
+    return counts
+
+def print_tree_with_counts(tree):
+    for i, row in enumerate(tree, start=1):
+        counts = count_values_in_row(row)
+        print(f"Row {i}: {counts}")
+
+# Set the number of rows (steps+1)
+rows = 25
+
+# Generate and print the tree with value counts
+tree = generate_tree(rows)
+print_tree_with_counts(tree)
