@@ -1,0 +1,45 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.optimize import curve_fit
+
+# Define the sets of points
+data_sets = [
+    [4, 5, 5, 6, 5, 6, 6, 7],
+    [5, 6, 6, 7, 6, 7, 7, 8, 6, 7, 7, 8, 7, 8, 8, 9],
+    [6, 7, 7, 8, 7, 8, 8, 9, 7, 8, 8, 9, 8, 9, 9, 10, 7, 8, 8, 9, 8, 9, 9, 10, 8, 9, 9, 10, 9, 10, 10, 11],
+    [7, 8, 8, 9, 8, 9, 9, 10, 8, 9, 9, 10, 9, 10, 10, 11, 8, 9, 9, 10, 9, 10, 10, 11, 9, 10, 10, 11, 10, 11, 11, 12, 8, 9, 9, 10, 9, 10, 10, 11, 9, 10, 10, 11, 10, 11, 11, 12, 9, 10, 10, 11, 10, 11, 11, 12, 10, 11, 11, 12, 11, 12, 12, 13],
+    [8, 9, 9, 10, 9, 10, 10, 11, 9, 10, 10, 11, 10, 11, 11, 12, 9, 10, 10, 11, 10, 11, 11, 12, 10, 11, 11, 12, 11, 12, 12, 13, 9, 10, 10, 11, 10, 11, 11, 12, 10, 11, 11, 12, 11, 12, 12, 13, 10, 11, 11, 12, 11, 12, 12, 13, 11, 12, 12, 13, 12, 13, 13, 14],
+    [9, 10, 10, 11, 10, 11, 11, 12, 10, 11, 11, 12, 11, 12, 12, 13, 10, 11, 11, 12, 11, 12, 12, 13, 11, 12, 12, 13, 12, 13, 13, 14, 10, 11, 11, 12, 11, 12, 12, 13, 11, 12, 12, 13, 12, 13, 13, 14, 11, 12, 12, 13, 12, 13, 13, 14, 12, 13, 13, 14, 13, 14, 14, 15],
+    [10, 11, 11, 12, 11, 12, 12, 13, 11, 12, 12, 13, 12, 13, 13, 14, 11, 12, 12, 13, 12, 13, 13, 14, 12, 13, 13, 14, 13, 14, 14, 15, 11, 12, 12, 13, 12, 13, 13, 14, 12, 13, 13, 14, 13, 14, 14, 15, 12, 13, 13, 14, 13, 14, 14, 15, 13, 14, 14, 15, 14, 15, 15, 16],
+    [11, 12, 12, 13, 12, 13, 13, 14, 12, 13, 13, 14, 13, 14, 14, 15, 12, 13, 13, 14, 13, 14, 14, 15, 13, 14, 14, 15, 14, 15, 15, 16, 12, 13, 13, 14, 13, 14, 14, 15, 13, 14, 14, 15, 14, 15, 15, 16, 13, 14, 14, 15, 14, 15, 15, 16, 14, 15, 15, 16, 15, 16, 16, 17]
+]
+
+# Sort the values in each list in ascending order
+sorted_data_sets = [sorted(data_set) for data_set in data_sets]
+
+# Plot the data sets and fitted polynomials
+for i, dataset in enumerate(sorted_data_sets):
+    x = np.arange(1, len(dataset) + 1)
+    y = np.array(dataset)
+    
+    # Define the polynomial function
+    def poly_func(x, a, b, c, d, e):
+        return a * x**4 + b * x**3 + c * x**2 + d * x + e
+    
+    # Fit the polynomial to the data
+    params, covariance = curve_fit(poly_func, x, y)
+    
+    # Plot the actual data points
+    plt.scatter(x, y, label=f'Row {i + 4}')
+    
+    # Plot the fitted polynomial curve
+    x_curve = np.linspace(1, len(dataset), 100)
+    y_curve = poly_func(x_curve, *params)
+    plt.plot(x_curve, y_curve, label=f'Fit Row {i + 4}', linestyle='--')
+
+# Add labels and legend to the side
+plt.title('Curves of Best Fit for Rearranged Set of Points (Degree 4 Polynomial)')
+plt.xlabel('Index')
+plt.ylabel('Value')
+plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+plt.show()
