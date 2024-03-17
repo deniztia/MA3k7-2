@@ -1,0 +1,64 @@
+import math
+
+def generate_spiral(limit):
+    n = int((limit - 1) ** 0.5 / 2) * 2 + 1
+    spiral = [[0] * n for _ in range(n)]
+    directions = [(0, 1), (-1, 0), (0, -1), (1, 0)]  # right, up, left, down (anticlockwise)
+    direction_index = 0
+    x, y = n // 2, n // 2
+    num = 1
+    step_size = 1
+
+    spiral[x][y] = num
+
+    while num < limit:
+        for _ in range(2):  # Each step_size, we add 2 numbers
+            for _ in range(step_size):
+                dx, dy = directions[direction_index]
+                x += dx
+                y += dy
+                num += 1
+                if num > limit:
+                    return spiral
+                spiral[x][y] = num
+            direction_index = (direction_index + 1) % 4
+        step_size += 1
+
+    return spiral
+
+
+def print_spiral(spiral):
+    n = len(spiral)
+    middle_row = n // 2
+    middle_col = n // 2
+    highlighted_numbers = []
+
+    for i, row in enumerate(spiral):
+        for j, num in enumerate(row):
+            if i == middle_row or j == middle_col:
+                highlighted_numbers.append(num)
+                print("\033[1m{:4d}\033[0m".format(num), end=" ")  # Highlight middle row and column
+            else:
+                print("{:4d}".format(num), end=" ")
+        print()
+
+    return sorted(highlighted_numbers)
+
+
+def print_differences(numbers):
+    differences = [numbers[i + 1] - numbers[i] for i in range(len(numbers) - 1)]
+    print("Differences between consecutive numbers:")
+    print(differences)
+
+
+if __name__ == "__main__":
+    limit = int(input("Enter the maximum number to print in the spiral: "))
+    n = math.ceil(limit ** 0.5)  # Round up to the next integer
+    if n % 2 == 0:  # Ensure the number is odd
+        n += 1
+    limit = n ** 2  # Square the rounded up odd integer
+    spiral = generate_spiral(limit)
+    highlighted_numbers = print_spiral(spiral)
+    print("Highlighted Numbers (Ascending):", highlighted_numbers)
+    print_differences(highlighted_numbers)
+
