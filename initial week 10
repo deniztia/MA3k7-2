@@ -1,0 +1,38 @@
+def generate_spiral(n):
+    spiral = [[0] * n for _ in range(n)]
+    directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]  # right, down, left, up
+    direction_index = 0
+    x, y = n // 2, n // 2
+    num = 1
+    step_size = 1
+
+    spiral[x][y] = num
+
+    while num < n * n:
+        for _ in range(2):  # Each step_size, we add 2 numbers
+            for _ in range(step_size):
+                dx, dy = directions[direction_index]
+                x += dx
+                y += dy
+                num += 1
+                spiral[x][y] = num
+                if num == n * n:
+                    return spiral
+            direction_index = (direction_index + 1) % 4
+        step_size += 1
+
+    return spiral
+
+
+def print_spiral(spiral):
+    for row in spiral:
+        for num in row:
+            print("{:2d}".format(num), end=" ")
+        print()
+
+
+if __name__ == "__main__":
+    size = int(input("Enter the size of the number spiral: "))
+    spiral = generate_spiral(size)
+    print("Number Spiral:")
+    print_spiral(spiral)
