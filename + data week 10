@@ -1,0 +1,114 @@
+import math
+
+def generate_spiral(limit):
+    n = int((limit - 1) ** 0.5 / 2) * 2 + 1
+    spiral = [[0] * n for _ in range(n)]
+    directions = [(0, 1), (-1, 0), (0, -1), (1, 0)]  # right, up, left, down (anticlockwise)
+    direction_index = 0
+    x, y = n // 2, n // 2
+    num = 1
+    step_size = 1
+
+    spiral[x][y] = num
+
+    while num < limit:
+        for _ in range(2):  # Each step_size, we add 2 numbers
+            for _ in range(step_size):
+                dx, dy = directions[direction_index]
+                x += dx
+                y += dy
+                num += 1
+                if num > limit:
+                    return spiral
+                spiral[x][y] = num
+            direction_index = (direction_index + 1) % 4
+        step_size += 1
+
+    return spiral
+
+
+def get_middle_row_right(spiral):
+    n = len(spiral)
+    middle_row = n // 2
+    middle_col = n // 2
+    return [num for num in spiral[middle_row][middle_col:]]
+
+
+def get_middle_row_left(spiral):
+    n = len(spiral)
+    middle_row = n // 2
+    middle_col = n // 2
+    return [num for num in reversed(spiral[middle_row][:middle_col + 1])]
+
+
+def get_middle_column_up(spiral):
+    n = len(spiral)
+    middle_row = n // 2
+    middle_col = n // 2
+    return [spiral[i][middle_col] for i in range(middle_row, -1, -1)]
+
+
+def get_middle_column_down(spiral):
+    n = len(spiral)
+    middle_row = n // 2
+    middle_col = n // 2
+    return [spiral[i][middle_col] for i in range(middle_row, n)]
+
+
+def print_differences(numbers):
+    differences = [numbers[i + 1] - numbers[i] for i in range(len(numbers) - 1)]
+    return differences
+
+
+def merge_lists(list1, list2, list3, list4):
+    merged_list = []
+    max_length = max(len(list1), len(list2), len(list3), len(list4))
+    for i in range(max_length):
+        if i < len(list1):
+            merged_list.append(list1[i])
+        if i < len(list2):
+            merged_list.append(list2[i])
+        if i < len(list3):
+            merged_list.append(list3[i])
+        if i < len(list4):
+            merged_list.append(list4[i])
+    return merged_list
+
+
+if __name__ == "__main__":
+    limit = int(input("Enter the maximum number to print in the spiral: "))
+    n = math.ceil(limit ** 0.5)  # Round up to the next integer
+    if n % 2 == 0:  # Ensure the number is odd
+        n += 1
+    limit = n ** 2  # Square the rounded up odd integer
+    spiral = generate_spiral(limit)
+
+    middle_row_right = get_middle_row_right(spiral)
+    middle_row_left = get_middle_row_left(spiral)
+    middle_column_up = get_middle_column_up(spiral)
+    middle_column_down = get_middle_column_down(spiral)
+
+    print("Middle Row (Right):", middle_row_right)
+    print("Middle Row (Left):", middle_row_left)
+    print("Middle Column (Up):", middle_column_up)
+    print("Middle Column (Down):", middle_column_down)
+
+    print("Differences, Right:", end=" ")
+    differences_middle_row_right = print_differences(middle_row_right)
+    print(differences_middle_row_right)
+
+    print("Differences, Left:", end=" ")
+    differences_middle_row_left = print_differences(middle_row_left)
+    print(differences_middle_row_left)
+
+    print("Differences, Up:", end=" ")
+    differences_middle_column_up = print_differences(middle_column_up)
+    print(differences_middle_column_up)
+
+    print("Differences, Down:", end=" ")
+    differences_middle_column_down = print_differences(middle_column_down)
+    print(differences_middle_column_down)
+
+    merged_list = merge_lists(differences_middle_row_right, differences_middle_column_up,
+                              differences_middle_row_left, differences_middle_column_down)
+    print("Merged List:", merged_list)
